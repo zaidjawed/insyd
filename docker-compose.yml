@@ -1,0 +1,56 @@
+version: "3.8"
+
+volumes:
+  postgres-data:
+  api-node-modules:
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: insyd
+      POSTGRES_USER: insyd
+      POSTGRES_PASSWORD: insyd123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U insyd"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api:/app
+      - api-node-modules:/app/node_modules
+    environment:
+      DB_HOST: postgres
+      DB_USER: insyd
+      DB_PASSWORD: insyd123
+      DB_NAME: insyd
+      LAMBDA_URL: http://lambda-worker:8080/2015-03-31/functions/function/invocations
+    depends_on:
+      postgres:
+        condition: service_healthy
+      lambda-worker:
+        condition: service_started
+    restart: unless-stopped
+
+  lambda-worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: postgres
+      DB_USER: insyd
+      DB_PASSWORD: insyd123
+      DB_NAME: insyd
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
