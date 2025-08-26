@@ -29,6 +29,10 @@ wss.on('connection', (ws) => {
 app.use(express.json());
 app.use(cors());
 
+app.get("/ping", (req, res) => {
+    res.status(200).json({ message: "pong" })
+});
+
 app.post('/like', async (req, res) => {
     let { userId, postId } = req.body;
 
