@@ -25,9 +25,6 @@ services:
     build: ./api
     ports:
       - "33000:3000"
-    volumes:
-      - ./api:/app
-      - api-node-modules:/app/node_modules
     environment:
       DB_HOST: postgres
       DB_USER: insyd
