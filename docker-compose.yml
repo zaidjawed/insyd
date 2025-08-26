@@ -12,7 +12,7 @@ services:
       POSTGRES_USER: insyd
       POSTGRES_PASSWORD: insyd123
     ports:
-      - "5432:5432"
+      - "55432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
@@ -24,7 +24,7 @@ services:
   api:
     build: ./api
     ports:
-      - "3000:3000"
+      - "33000:3000"
     volumes:
       - ./api:/app
       - api-node-modules:/app/node_modules

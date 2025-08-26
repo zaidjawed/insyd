@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 export default function App() {
   const [notifications, setNotifications] = useState([]);
 
-  const API_URL = import.meta.env.VITE_API_URL;
-  const WS_URL = import.meta.env.VITE_WS_URL;
+  const API_URL = import.meta.env.VITE_API_BASE_URL;
+  const WS_URL = import.meta.env.VITE_API_WS_URL;
 
   useEffect(() => {
     const ws = new WebSocket(WS_URL);
